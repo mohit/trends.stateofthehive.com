@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+   <head>
+      <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <link rel="stylesheet" href="css/bootstrap.min.css" />
+
+      <title>The Trending State</title>
+   </head>
+
+   <body>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+      <script src="https://raw.github.com/janl/mustache.js/master/mustache.js"></script>
+      <script src="js/bootstrap.js"></script>
+      <script src="app.js"></script>
+
+      <script type="text/javascript" charset="utf-8">
+         $(document).ready(function() {
+
+            $(".collapse").collapse();
+
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(init, error);
+            } else {
+               error('not supported');
+               init({
+                  position: {
+                     coords: {
+                        latitude: "37.7623",
+                        longitude: "-122.431"
+                        }
+                  }});
+            }
+
+         });
+
+         function init(position) {
+
+            FoursquareTrends.initialize();
+            FoursquareTrends.request(position.coords.latitude, 
+                                     position.coords.longitude);
+         }
+      </script>
+
+      <div class="container-fluid">
+
+         <div class="hero-unit">
+            <h1>State of the Hive</h1>
+            <p>Trending venues around the hive.</p>
+
+            <!--<p><a id="learn-more" class="btn btn-primary btn-large">-->
+               <!--Learn more-->
+            <!--</a></p>-->
+
+         </div>
+
+         <ul id="trending" class="nav nav-pills nav-stacked span12">
+
+         </ul>
+
+      </div>
+
+      <span id="li_tmpl" style="display:none;">
+         <li class="row-fluid"> 
+         <a href="#{{id}}" data-target="#{{id}}" data-toggle="collapse">{{name}}</a>
+         <div id="{{id}}" class="collapse in">
+            <table class="span4 table table-condensed">
+               <thead>
+                  <tr>
+                     <td>Checked In: </td>
+                     <td>{{hereNow.count}}</td>
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr>
+                     <td>Total Check-In's</td>
+                     <td>{{stats.checkinsCount}}</td>
+                  </tr>
+                  <tr>
+                     <td>Unique Check-In's</td>
+                     <td>{{stats.usersCount}}</td>
+                  </tr>
+               </tbody>
+            </table>
+
+            <ul id="{{id}}_images" class="span8 thumbnails"> 
+
+            </ul>
+         </div>
+         </li>
+      </span>
+
+      <span id="_recentMediaItem" style="display:none;">
+         <li>
+            <a href={{link}} class="thumbnail"><img src={{images.thumbnail.url}} alt="" /></a>
+         </li>
+      </span>
+
+   </body>
+</html>
